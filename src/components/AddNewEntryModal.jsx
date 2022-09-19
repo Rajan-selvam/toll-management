@@ -31,30 +31,33 @@ const AddNewEntryModal = (props) => {
         setInValid(false);
         const isRegNo = e.target.value.match(/^[0-9a-zA-Z]+$/);
         if (isRegNo === null) setInValid(true);
-        entryLogValidationHandler();
+        // entryLogValidationHandler();
         await findIsReturnVehicle();        
     };
 
     const findIsReturnVehicle = () => {
-        tollLogs && tollLogs?.filter((tollLog) => {
-            if (tollLog.vehicle_no === vNo.current.value && tollLog.tollName === tollNameRef.current.value) {
-                let d = new Date(new Date().getTime() - (1000 * 60 * 60));
-                let date = d.getDate();
-                let hourAgo = d.getHours();
-                let minutesAgo = d.getMinutes();
-                let logTime = new Date(tollLog.timeStramp);
-                let logDate = logTime.getDate();
-                let logHour = logTime.getHours();
-                let logMinutes = logTime.getMinutes();
-                if(date - logDate <= 1 && (hourAgo - logHour <= 1 && hourAgo - logHour >= -1) && minutesAgo - logMinutes <= 60){
-                    const currentToll = tollList.find((toll) => toll.tollName === tollLog.tollName);
-                    tariffRef.current.value = currentToll[tollLog.vehicleType+'Return'];
-                    return currentToll;
-                }
-            } 
-            return null;
+        const filteredLogs = tollLogs && tollLogs?.filter((tollLog) => {
+            return ((tollLog.vehicle_no === vNo.current.value) && 
+            (new Date(tollLog.timeStramp).getTime() >= new Date(new Date().getTime() - (1000 * 60 * 60)).getTime()) && 
+            (tollLog.tollName === tollNameRef.current.value));
         });
-    }
+        const currentToll = tollList && tollList?.find(toll => toll.tollName === tollNameRef.current.value);
+        let latestLog = {};
+        if (filteredLogs && filteredLogs.length >= 1) latestLog = filteredLogs[0];
+        filteredLogs && filteredLogs.length > 1 && filteredLogs?.forEach((vehicleLog, index) => {
+            if(new Date(latestLog.timeStramp).getTime() < new Date(filteredLogs[index].timeStramp).getTime()) {
+                latestLog = vehicleLog;
+            }
+        });
+        tariffRef.current.value = currentToll[vehicleTypeRef.current.value + 'Single'];
+        if(Object.keys(latestLog).length > 0 && currentToll) {
+            if(currentToll[latestLog.vehicleType + 'Single'] === latestLog.tariff){
+                tariffRef.current.value = currentToll[vehicleTypeRef.current.value + 'Return'];
+            } else if(currentToll[latestLog.vehicleType + 'Return'] === latestLog.tariff){
+                tariffRef.current.value = currentToll[vehicleTypeRef.current.value + 'Single'];
+            }
+        }
+    };
 
     //save vehicle log
     const newEntrySubmitHandler = (e) => {

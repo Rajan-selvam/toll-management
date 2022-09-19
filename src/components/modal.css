@@ -26,7 +26,7 @@
     position: fixed;
     top: 1%;
     margin-top: 100px;
-    left: 20%;
+    left: 25%;
     padding: 20px;
     background-color: #fefefe;
     width: 800px;
@@ -133,7 +133,7 @@ input[type=number] {
 
 .modal-content-wrap.entry-form {
     width: 600px;
-    left: 26%;
+    left: 30%;
 }
 
 .entry-form-group{
