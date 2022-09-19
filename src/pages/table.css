@@ -1,0 +1,145 @@
+.header-title{
+    font-size: 22px;
+    display: inline-block;
+}
+
+.header-title::after{
+    border-left: 2px solid #ccc;
+    content: '';
+    margin-left: 15px;
+}
+
+.table-header {    
+    list-style: none;
+    position: relative;
+}
+.table-header li {
+    display: inline-block;
+    padding-right: 20px;
+    position: relative;
+}
+.table-header li:nth-child(1){
+    padding-right: 0;
+}
+.table-header li:nth-child(2){
+    top: 8px;
+}
+
+.float-right input{
+    margin: 0 20px 0;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0 2.5vh 0;
+    border-radius: 5px;
+    height: 35px;
+    right: 2px;
+    background-color: rgb(0, 132, 255);
+    color: #fff;
+}
+
+.float-right {
+    float: right;
+    padding-top: 25px;
+}
+
+.filterIcon{
+    width: 25px;
+    height: 25px;
+    padding-left: 20px;
+    padding-top: 15px;
+}
+
+.search{
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    color:#000;
+    background:url("/src/assets/searchBox.svg") no-repeat;
+    background-size: 18px;
+    background-position: 2px;
+    background-position-x: 9px;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:14px;
+    height: 32px ;
+    line-height:36px;
+    margin-right:12px;
+    outline:medium none;
+    padding:0 0 0 35px;
+    text-shadow:1px 1px 0 white;
+    width:300px;
+}
+.table {
+    margin-top: 3rem;
+    width: 100%;
+}
+.table-head{
+    background-color: #F0F4F7;
+    height: 2rem;
+}
+.table-row {    
+    width: 100%;
+}
+.table-headers {
+    text-align: left;
+    padding: 3px 25px;
+    font-size: 14px;
+}
+.header_0 {
+    width: 430px;
+}
+.header_4 {
+    width: 230px;
+}
+.header_5 {
+    width: 30px;
+}
+.table-body{
+    overflow: auto;
+    height: 80%;
+}
+.table-body-row {    
+    width: 100%;
+    border-bottom: 2px solid #EFF1F3;
+}
+.table-body-row td {
+    padding-left: 20px;
+    height: 10vh;
+    border-bottom: 2px solid #EFF1F3;
+    font-size: 14px;
+}
+.col-span{
+    text-align: center;
+    font-size: 15px;
+    text-decoration: underline;
+}
+.filter-ul{
+    left: -15px;
+    top: 55px;
+    display: block;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 4px;
+    box-shadow: 0 0 9px #ccc;
+    position: absolute;
+    width: 100px;
+    max-height: 500px;
+    z-index: 999;
+    background-color: white;
+    overflow: auto;
+}
+.filter-ul li {
+    font-size: 14px;
+    padding: 10px;
+    display: block;
+    position: unset;
+}
+
+.filter-ul li:hover {
+    background-color: #ccc;
+    transition: 0.5s;
+}
+.delete-icon {
+    width: 20px;
+    height: 20px;
+    color: #ff0000;
+}

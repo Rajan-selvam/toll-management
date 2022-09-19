@@ -1,0 +1,146 @@
+.model-content label{
+    display: block;
+    padding-bottom: 15px;
+}
+.close-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.modal {
+    position: fixed; 
+    z-index: 1; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    -webkit-animation-name: fadeIn; 
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+  }
+  
+.modal-content-wrap {
+    position: fixed;
+    top: 1%;
+    margin-top: 100px;
+    left: 20%;
+    padding: 20px;
+    background-color: #fefefe;
+    width: 800px;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slideIn;
+    animation-duration: 0.4s
+}  
+
+.close-icon {
+    z-index: 1;
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.close-icon:hover,
+.close-icon:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.model-h3 {
+    text-align: center;
+    font-size: 30px;
+}
+
+.vehicle_fare_details {
+    width: 100%;
+}
+.vehicle_fare_details select, .vehicle_fare_details input {
+    width: 30%;
+    align-items: center;
+    border-radius: 4px;
+    background-color: #ffff;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+.vehicle_fare_details select{
+    margin-right: 10px;
+}
+.vehicle_fare_details input {
+    margin-right: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.toll_name input {
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 97%;
+    border: 1px solid #ccc;
+}
+
+.v_name{
+    padding-top: 20px;
+}
+
+.submit input {
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background: dodgerblue;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.entry-model-from-group label{
+    display: block;
+    padding-bottom: 6px;
+}
+
+.entry-model-from-group  input, .entry-model-from-group select{
+    width: 100%;
+    align-items: center;
+    border-radius: 4px;
+    background-color: #ffff;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+.entry-model-from-group  input {
+    width: 97%;
+}
+
+.modal-content-wrap.entry-form {
+    width: 600px;
+    left: 26%;
+}
+
+.entry-form-group{
+    padding: 0 30px;
+}
+
+.tollNameError {
+    font-size: 13px;
+    color: #ff0000;
+}
