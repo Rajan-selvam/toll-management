@@ -9,7 +9,8 @@ export const vehicle_types = [
     "CAR/JEEP/VAN",
     "LCV",
     "TRUCK/BUS",
-    "HEAVY VEHICLE"
+    "HEAVY VEHICLE",
+    "Two Wheelers"
 ];
 
 const AddNewTollModal = (props) => {
@@ -17,18 +18,6 @@ const AddNewTollModal = (props) => {
     const { tollList } = useSelector((state) => state.tollGate);
 
     const tollNameRef = useRef();
-    const vehicleTypeRef1 = useRef();
-    const singleJourneyRef1 = useRef();
-    const returnJourneyRef1 = useRef();
-    const vehicleTypeRef2 = useRef();
-    const singleJourneyRef2 = useRef();
-    const returnJourneyRef2 = useRef();
-    const vehicleTypeRef3 = useRef();
-    const singleJourneyRef3 = useRef();
-    const returnJourneyRef3 = useRef();
-    const vehicleTypeRef4 = useRef();
-    const singleJourneyRef4 = useRef();
-    const returnJourneyRef4 = useRef();
 
     const [tollNameError, setTollNameError] = useState();
    
@@ -43,41 +32,24 @@ const AddNewTollModal = (props) => {
         }
     };
 
-    const vehicleTypeHandler = (e) => {
-        if ((vehicleTypeRef1.current.value === vehicleTypeRef2.current.value) 
-        || (vehicleTypeRef1.current.value === vehicleTypeRef3.current.value)
-        || (vehicleTypeRef1.current.value === vehicleTypeRef4.current.value)) {
-            alert('Duplicate Vehicle Type!');
-            e.target.value = "";
-        } else if ((vehicleTypeRef2.current.value.length > 0)
-        && ((vehicleTypeRef2.current.value === vehicleTypeRef1.current.value) 
-        || (vehicleTypeRef2.current.value === vehicleTypeRef3.current.value)
-        || (vehicleTypeRef2.current.value === vehicleTypeRef4.current.value))) {
-            alert('Duplicate Vehicle Type!');
-            e.target.value = "";
-        } else if ((vehicleTypeRef3.current.value.length > 0)
-        && ((vehicleTypeRef3.current.value === vehicleTypeRef1.current.value) 
-        || (vehicleTypeRef3.current.value === vehicleTypeRef2.current.value)
-        || (vehicleTypeRef3.current.value === vehicleTypeRef4.current.value))) {
-            alert('Duplicate Vehicle Type!');
-            e.target.value = "";
-        }
-    };
-
     const newTollSubmitHandler = (e) => {
         e.preventDefault();
-
-        const newTollData = {
-            tollName: tollNameRef.current.value,
-            [`${[vehicleTypeRef1.current.value]}Single`]: singleJourneyRef1.current.value,
-            [`${[vehicleTypeRef1.current.value]}Return`]: returnJourneyRef1.current.value,
-            [`${[vehicleTypeRef2.current.value]}Single`]: singleJourneyRef2.current.value,
-            [`${[vehicleTypeRef2.current.value]}Return`]: returnJourneyRef2.current.value,
-            [`${[vehicleTypeRef3.current.value]}Single`]: singleJourneyRef3.current.value,
-            [`${[vehicleTypeRef3.current.value]}Return`]: returnJourneyRef3.current.value,
-            [`${[vehicleTypeRef4.current.value]}Single`]: singleJourneyRef4.current.value,
-            [`${[vehicleTypeRef4.current.value]}Return`]: returnJourneyRef4.current.value,
-        };
+        const data = new FormData(e.target);
+       
+        let newTollData = {tollName: tollNameRef.current.value};
+        vehicle_types.forEach((vehicle,index) => {
+            // console.log(data.get(`vehicleType[${index}]`) , data.get(`vehicleType[${index - 1}]`));
+            // if (data.get(`vehicleType[${index}]`) === data.get(`vehicleType[${index - 1}]`)) {
+            //     skip = true;
+            //     console.log('here', skip);
+            //     return;
+            // }
+            newTollData = {
+                ...newTollData,                
+                [`${[data.get(`vehicleType[${index}]`)]}Single`]: data.get(`singleJourneyRate[${index}]`),
+                [`${[data.get(`vehicleType[${index}]`)]}Return`]: data.get(`doubleJourneyRate[${index}]`)
+            };
+        });
         Dispatch(addNewToll(newTollData));
         closeModal();
     };
@@ -97,41 +69,17 @@ const AddNewTollModal = (props) => {
 
                 
                     <label htmlFor="vehicle_fare_details" className="v_name">Vehicle fare details<sup className="color-red">*</sup></label>
-                    <div className="vehicle_fare_details">
-                        <select ref={vehicleTypeRef1} required onChange={vehicleTypeHandler}>
+                    {vehicle_types && vehicle_types.map((input, index) => (
+                        <div className="vehicle_fare_details" key={index}>
+                            <select required name={`vehicleType[${index}]`}>
                             <option value="">Select Vehicle type</option>
                             {vehicle_types.map(item => <option value={item} key={item}>{item}</option>)}
-                        </select>
-                        <input type="number" ref={singleJourneyRef1} placeholder="Single Journey" required/>
-                        <input type="number"ref={returnJourneyRef1} placeholder="Return Journey" required />
-                    </div>
-
-                    <div className="vehicle_fare_details">
-                        <select ref={vehicleTypeRef2} required onChange={vehicleTypeHandler}>
-                            <option value="">Select Vehicle type</option>
-                            {vehicle_types.map(item => <option value={item} key={item}>{item}</option>)}
-                        </select>
-                        <input type="number" ref={singleJourneyRef2} placeholder="Single Journey" required />
-                        <input type="number" ref={returnJourneyRef2} placeholder="Return Journey" required />
-                    </div>
-
-                    <div className="vehicle_fare_details">
-                        <select ref={vehicleTypeRef3} required onChange={vehicleTypeHandler}>
-                            <option value="">Select Vehicle type</option>
-                            {vehicle_types.map(item => <option value={item} key={item}>{item}</option>)}
-                        </select>
-                        <input type="number" ref={singleJourneyRef3} placeholder="Single Journey" required />
-                        <input type="number" ref={returnJourneyRef3} placeholder="Return Journey" required />
-                    </div>
-
-                    <div className="vehicle_fare_details">
-                        <select ref={vehicleTypeRef4} required onChange={vehicleTypeHandler}>
-                            <option value="">Select Vehicle type</option>
-                            {vehicle_types.map(item => <option value={item} key={item}>{item}</option>)}
-                        </select>
-                        <input type="number" ref={singleJourneyRef4} placeholder="Single Journey" required />
-                        <input type="number" ref={returnJourneyRef4} placeholder="Return Journey" required />
-                    </div>
+                            </select>
+                            <input type="number" name={`singleJourneyRate[${index}]`} placeholder="Single Journey" required/>
+                            <input type="number" name={`doubleJourneyRate[${index}]`} placeholder="Return Journey" required />
+                        </div>
+                    ))}
+                    
 
                     <div className="submit">
                         <input type="submit" value="Add Details" disabled={tollNameError} />
