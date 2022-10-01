@@ -10,7 +10,7 @@ const App = () => {
       <header className="App-header">
         <h5 className='App-header-name'>Toll Management Application</h5>
       </header>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
         <Route path='/' element={<TollEntries />} />
         <Route path='/toll-list' element={<Tolls />} />

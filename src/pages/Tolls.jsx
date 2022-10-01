@@ -2,13 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllToll } from "../features/tollGate/tollGateSlice";
 import Table from './Table';
+import { vehicle_types } from "../components/AddNewTollModal";
 
 const headers = [
   "TOLL NAME",
-  "CAR/JEEP/VAN",
-  "LCV",
-  "TRUCK/BUS",
-  "HEAVY VEHICLE",
+  ...vehicle_types,
   "Action"
 ];
 

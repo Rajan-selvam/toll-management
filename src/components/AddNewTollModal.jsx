@@ -10,7 +10,7 @@ export const vehicle_types = [
     "LCV",
     "TRUCK/BUS",
     "HEAVY VEHICLE",
-    "Two Wheelers"
+    "TWO WHEELERS"
 ];
 
 const AddNewTollModal = (props) => {
@@ -32,18 +32,12 @@ const AddNewTollModal = (props) => {
         }
     };
 
-    const newTollSubmitHandler = (e) => {
+    const newTollSubmitHandler = async (e) => {
         e.preventDefault();
         const data = new FormData(e.target);
        
         let newTollData = {tollName: tollNameRef.current.value};
         vehicle_types.forEach((vehicle,index) => {
-            // console.log(data.get(`vehicleType[${index}]`) , data.get(`vehicleType[${index - 1}]`));
-            // if (data.get(`vehicleType[${index}]`) === data.get(`vehicleType[${index - 1}]`)) {
-            //     skip = true;
-            //     console.log('here', skip);
-            //     return;
-            // }
             newTollData = {
                 ...newTollData,                
                 [`${[data.get(`vehicleType[${index}]`)]}Single`]: data.get(`singleJourneyRate[${index}]`),
@@ -52,6 +46,19 @@ const AddNewTollModal = (props) => {
         });
         Dispatch(addNewToll(newTollData));
         closeModal();
+    };
+
+    const validateDuplicateEntry = (event,index) => {
+        let entries = [];
+        vehicle_types.forEach((vehicle, arrayIndex) => {
+            if(arrayIndex !== index) 
+                entries.push(document.getElementsByName(`vehicleType[${arrayIndex}]`)[0].value);
+        });
+        let existVehicle = entries.find((entity) => entity === event.target.value);
+        if (existVehicle) {
+            alert('Duplicate Vehicle Entry!');
+            event.target.value = "";
+        }
     };
 
     return (
@@ -71,7 +78,7 @@ const AddNewTollModal = (props) => {
                     <label htmlFor="vehicle_fare_details" className="v_name">Vehicle fare details<sup className="color-red">*</sup></label>
                     {vehicle_types && vehicle_types.map((input, index) => (
                         <div className="vehicle_fare_details" key={index}>
-                            <select required name={`vehicleType[${index}]`}>
+                            <select required name={`vehicleType[${index}]`} onChange={(event) => validateDuplicateEntry(event,index)}>
                             <option value="">Select Vehicle type</option>
                             {vehicle_types.map(item => <option value={item} key={item}>{item}</option>)}
                             </select>
