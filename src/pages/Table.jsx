@@ -103,8 +103,8 @@ const Table = ({...props}) => {
              `${item[vehicle_types[3] + 'Single']}/${item[vehicle_types[3] + 'Return']}`}</td>
             {page === "toll_list" &&  
             <>
-                <td className="table-body-col">{page === "toll_entry" ? item.tariff:
-                `${item[vehicle_types[4] + 'Single']}/${item[vehicle_types[4] + 'Return']}`}</td>
+                {/* <td className="table-body-col">{page === "toll_entry" ? item.tariff:
+                `${item[vehicle_types[4] + 'Single']}/${item[vehicle_types[4] + 'Return']}`}</td> */}
                 <td className="table-body-col">
                     <img src={TrashIcon} alt="delete-icon" className="delete-icon" onClick={() => deleteHandler(item.tollName)} />
                 </td>

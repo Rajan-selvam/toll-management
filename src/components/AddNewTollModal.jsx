@@ -9,8 +9,7 @@ export const vehicle_types = [
     "CAR/JEEP/VAN",
     "LCV",
     "TRUCK/BUS",
-    "HEAVY VEHICLE",
-    "TWO WHEELERS"
+    "HEAVY VEHICLE"
 ];
 
 const AddNewTollModal = (props) => {
@@ -25,9 +24,10 @@ const AddNewTollModal = (props) => {
     
     const tollNameHandler = () => {
         setTollNameError();
+        let entertedTollName = tollNameRef.current.value.toUpperCase();
         const tollExist = tollList && tollList?.length > 0 && 
-        tollList.filter(toll => toll.tollName.toUpperCase() === tollNameRef.current.value.toUpperCase());
-        if (tollExist && tollExist.length > 0) {
+        tollList.find(toll =>  toll.tollName.toUpperCase() === entertedTollName);
+        if (tollExist) {
             setTollNameError('Toll Name Already Exist');
         }
     };
@@ -49,13 +49,12 @@ const AddNewTollModal = (props) => {
     };
 
     const validateDuplicateEntry = (event,index) => {
-        let entries = [];
-        vehicle_types.forEach((vehicle, arrayIndex) => {
-            if(arrayIndex !== index) 
-                entries.push(document.getElementsByName(`vehicleType[${arrayIndex}]`)[0].value);
+        const existingVehicleType = vehicle_types.find((vehicle, arrayIndex) => {
+            if(arrayIndex !== index) {
+                return (document.getElementsByName(`vehicleType[${arrayIndex}]`)[0].value === event.target.value);                  
+            }
         });
-        let existVehicle = entries.find((entity) => entity === event.target.value);
-        if (existVehicle) {
+        if(existingVehicleType) {
             alert('Duplicate Vehicle Entry!');
             event.target.value = "";
         }

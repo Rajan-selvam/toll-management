@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import TollEntries from './pages/TollEntries';
-import Tolls from './pages/Tolls';
+const TollEntries = lazy(() => import('./pages/TollEntries'));
+const Tolls = lazy(() => import('./pages/Tolls'));
 
 const App = () => {
   return (
@@ -11,10 +11,12 @@ const App = () => {
         <h5 className='App-header-name'>Toll Management Application</h5>
       </header>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Routes>
-        <Route path='/' element={<TollEntries />} />
-        <Route path='/toll-list' element={<Tolls />} />
-        </Routes>
+        <Suspense>
+          <Routes>
+          <Route path='/' element={<TollEntries />} />
+          <Route path='/toll-list' element={<Tolls />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </div>
   );
