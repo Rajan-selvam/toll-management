@@ -11,7 +11,7 @@ const App = () => {
         <h5 className='App-header-name'>Toll Management Application</h5>
       </header>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Suspense>
+        <Suspense fallback={<>Loading..</>}>
           <Routes>
           <Route path='/' element={<TollEntries />} />
           <Route path='/toll-list' element={<Tolls />} />
