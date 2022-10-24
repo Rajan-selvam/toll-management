@@ -2,15 +2,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 //Local Imports
 import { getAllVehicleLog,getAllToll } from '../features/tollGate/tollGateSlice';
-import Table from './Table';
+import TableLayout from './TableLayout';
 
-const headers = [
-  "VEHICLE TYPE",
-  "VEHICLE NUMBER",
-  "DATE/TIME",
-  "TOLL NAME",
-  "TARIFF"
-];
+const tableHeaders = { 
+  headers : ["VEHICLE TYPE", "VEHICLE NUMBER", "DATE/TIME", "TOLL NAME", "TARIFF"],
+  rowKeys : ["vehicleType", "vehicle_no", "dateTime", "tollName",  "tariff"]
+};
 
 const TollEntries = () => {
 
@@ -19,6 +16,7 @@ const TollEntries = () => {
 
   const { tollLogs, tollList} = useSelector((state) => state.tollGate);
   const tollGateNames = tollList && tollList?.map((toll) => toll.tollName);
+
   if(tollGateNames && tollGateNames.length > 0) {
     tollNames.push(...tollGateNames);
   }
@@ -34,11 +32,13 @@ const TollEntries = () => {
     filters: tollNames,
     search: true,
     button: {title : 'View all tolls', url: "/toll-list"},
-    headers,
+    tableHeaders,
     entries: tollLogs
   };
 
-  return <Table props={props} />;
+  return <>
+    <TableLayout props={props} />
+  </>;
 };
 
 export default TollEntries;

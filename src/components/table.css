@@ -1,0 +1,40 @@
+.table {
+    margin-top: 50px;
+    width: 100%;
+}
+.table-head {
+    background-color: #F0F4F7;
+    height: 35px;
+}
+.table-row {    
+    width: 100%;
+}
+.table-headers {
+    text-align: left;
+    padding: 3px 25px;
+    font-size: 14px;
+}
+.table-body{
+    overflow: auto;
+    height: 80%;
+}
+.table-body-row {
+    width: 100%;
+    border-bottom: 2px solid #EFF1F3;
+}
+.table-body-row td {
+    padding-left: 20px;
+    height: 60px;
+    font-size: 14px;
+    border-bottom: 2px solid #EFF1F3;
+}
+.col-span {
+    text-align: center;
+    font-size: 15px;
+    text-decoration: underline;
+}
+.delete-icon {
+    width: 20px;
+    height: 20px;
+    color: #ff0000;
+}

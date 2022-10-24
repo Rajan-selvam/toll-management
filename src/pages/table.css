@@ -68,22 +68,6 @@
     text-shadow:1px 1px 0 white;
     width:300px;
 }
-.table {
-    margin-top: 3rem;
-    width: 100%;
-}
-.table-head{
-    background-color: #F0F4F7;
-    height: 2rem;
-}
-.table-row {    
-    width: 100%;
-}
-.table-headers {
-    text-align: left;
-    padding: 3px 25px;
-    font-size: 14px;
-}
 .header_0 {
     width: 430px;
 }
@@ -92,25 +76,6 @@
 }
 .header_5 {
     width: 30px;
-}
-.table-body{
-    overflow: auto;
-    height: 80%;
-}
-.table-body-row {    
-    width: 100%;
-    border-bottom: 2px solid #EFF1F3;
-}
-.table-body-row td {
-    padding-left: 20px;
-    height: 10vh;
-    border-bottom: 2px solid #EFF1F3;
-    font-size: 14px;
-}
-.col-span{
-    text-align: center;
-    font-size: 15px;
-    text-decoration: underline;
 }
 .filter-ul{
     left: -15px;

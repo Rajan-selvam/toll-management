@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 //local import
 import AddNewTollModal from "../components/AddNewTollModal";
 import AddNewEntryModal from "../components/AddNewEntryModal";
-import { vehicle_types } from "../components/AddNewTollModal";
-import { deleteToll } from "../features/tollGate/tollGateSlice";
+import Table from '../components/Table';
 import filterIcon from "../assets/filter.svg";
-import TrashIcon from "../assets/trash.svg";
 import "./table.css";
 
-const Table = ({...props}) => {
+const TableLayout = ({...props}) => {
 
-    const {title ,filters, search, button, headers, entries, page} = props.props;
+    const {
+        title, 
+        page, 
+        filters, 
+        search, 
+        button, 
+        tableHeaders, 
+        entries 
+    } = props.props;
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [showFilter, setShowFilter] = useState(false);
     const [isFiltered, setIsFiltered] = useState('');
@@ -33,7 +37,8 @@ const Table = ({...props}) => {
                     let vehicle_no = entries[index].vehicle_no;
                     if(isFiltered.length > 0){
                         let toll_name_filter = entries[index].tollName.toUpperCase();
-                        return vehicle_no.match(e.target.value.toUpperCase()) && (toll_name_filter.match(isFiltered.toUpperCase()));
+                        return vehicle_no.match(e.target.value.toUpperCase()) && 
+                        (toll_name_filter.match(isFiltered.toUpperCase()));
                     }
                     return vehicle_no.match(e.target.value.toUpperCase());
                 case "toll_list":
@@ -74,49 +79,19 @@ const Table = ({...props}) => {
         setFilterRecords(filterVehicles);
     };
 
-    //delete handler
-    const deleteHandler = (toll_name) => {
-        if (window.confirm("Toll Delete Confirmation") === true){
-            dispatch(deleteToll(toll_name));
-        }            
-    };
-
     let headerTitle = title && <h4 className="header-title">{title}</h4>;
 
     let headerFilter = filters && filters.map(item =>
-        <li className="filterItems" key={item} onClick={() => filterHandler(item)}>{item}</li>
+        <li className="filterItems" key={item} 
+        onClick={() => filterHandler(item)}>{item}</li>
     );
 
-    let headerSearch = search && <input className="search" style={{display:"inline-block"}} type="text" placeholder="Search Vehicle" onChange={SearchHandler} />;
-
-    let records = filterRecords && filterRecords?.length > 0 ?
-    filterRecords.map((item , index) => (
-        <tr className="table-body-row" key={index}>
-            <td className="table-body-col">{page === "toll_entry" ? item.vehicleType: item.tollName}</td>
-            <td className="table-body-col">{page === "toll_entry" ? item.vehicle_no:
-             `${item[vehicle_types[0] + 'Single']}/${item[vehicle_types[0] + 'Return']}`}</td>
-            <td className="table-body-col">{page === "toll_entry" ? item.dateTime:
-             `${item[vehicle_types[1] + 'Single']}/${item[vehicle_types[1] + 'Return']}`}</td>
-            <td className="table-body-col">{page === "toll_entry" ? item.tollName:
-             `${item[vehicle_types[2] + 'Single']}/${item[vehicle_types[2] + 'Return']}`}</td>
-            <td className="table-body-col">{page === "toll_entry" ? item.tariff:
-             `${item[vehicle_types[3] + 'Single']}/${item[vehicle_types[3] + 'Return']}`}</td>
-            {page === "toll_list" &&  
-            <>
-                {/* <td className="table-body-col">{page === "toll_entry" ? item.tariff:
-                `${item[vehicle_types[4] + 'Single']}/${item[vehicle_types[4] + 'Return']}`}</td> */}
-                <td className="table-body-col">
-                    <img src={TrashIcon} alt="delete-icon" className="delete-icon" onClick={() => deleteHandler(item.tollName)} />
-                </td>
-            </>
-            }
-        </tr>
-    )) 
-    : (
-        <tr className="table-body-row">
-            <td colSpan={5} className="col-span">{page === "toll_entry" ? 'No Record Found' : 'Toll not found'}</td>
-        </tr>
-    );
+    let headerSearch = search && 
+    <input className="search" 
+        style={{display:"inline-block"}} 
+        type="text" placeholder="Search Vehicle" 
+        onChange={SearchHandler} 
+    />;
 
     useEffect(() => {
         setFilterRecords(entries);
@@ -128,7 +103,8 @@ const Table = ({...props}) => {
                 {headerTitle && <li>{headerTitle}</li>}
                 <li>
                 {headerFilter && (
-                   <img src={filterIcon} className="filterIcon" onClick={() => setShowFilter(!showFilter) } alt="filterIcon" />
+                   <img src={filterIcon} className="filterIcon" 
+                   onClick={() => setShowFilter(!showFilter) } alt="filterIcon" />
                 )}
                 {showFilter && <ul className="filter-ul">{headerFilter}</ul>}
                 </li> 
@@ -139,25 +115,17 @@ const Table = ({...props}) => {
                     { button && <input type="button" value={button.title} onClick={()=> navigate(button.url)} />}
                 </li>
             </ul>
-            <div className="table-div">
-                <table className="table">
-                    <thead className="table-head">
-                        <tr className="table-row">
-                            {headers && headers.map((item, index) => 
-                            <th className={`table-headers header_${index}`} key={index}>{item}</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody className="table-body">
-                        {records}
-                    </tbody>
-                    <tfoot className="table-foot"></tfoot>
-                </table>
-            </div>
+            
+            <Table 
+                headers={tableHeaders.headers} 
+                rows={filterRecords} 
+                rowKeys={tableHeaders.rowKeys} 
+            />
+
             {newTollModal && <AddNewTollModal closeModal={()=> setNewTollModal(false)} />}
             {newEntryModal && <AddNewEntryModal closeModal={()=> setNewEntryModal(false)} />}
         </div>
     );
 };
 
-export default Table;
+export default TableLayout;

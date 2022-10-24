@@ -9,7 +9,8 @@ export const vehicle_types = [
     "CAR/JEEP/VAN",
     "LCV",
     "TRUCK/BUS",
-    "HEAVY VEHICLE"
+    "HEAVY VEHICLE",
+    "TWO WHEELERS"
 ];
 
 const AddNewTollModal = (props) => {
@@ -72,7 +73,6 @@ const AddNewTollModal = (props) => {
                         <input type="text" ref={tollNameRef} placeholder="Enter Toll Name" required onChange={tollNameHandler} />
                         { tollNameError && <p className="tollNameError">{tollNameError}</p>}
                     </div>
-
                 
                     <label htmlFor="vehicle_fare_details" className="v_name">Vehicle fare details<sup className="color-red">*</sup></label>
                     {vehicle_types && vehicle_types.map((input, index) => (
@@ -84,8 +84,7 @@ const AddNewTollModal = (props) => {
                             <input type="number" name={`singleJourneyRate[${index}]`} placeholder="Single Journey" required/>
                             <input type="number" name={`doubleJourneyRate[${index}]`} placeholder="Return Journey" required />
                         </div>
-                    ))}
-                    
+                    ))}                   
 
                     <div className="submit">
                         <input type="submit" value="Add Details" disabled={tollNameError} />
