@@ -1,17 +1,35 @@
 import "./table.css";
+import { TrashIcon } from "../constant/entities";
 
-const Table = ({headers, rows, rowKeys, emptyRow}) => {
+const Table = ({
+    headers, 
+    rows, 
+    emptyRow, 
+    deleteKey,
+    deleteHandler
+}) => {
     let records = rows?.length > 0 ?
-        rows?.map((row, index) => (
+        rows?.map((row, index) => {
+            return (
             <tr className="table-body-row" key={index}>
-                {rowKeys?.map((rowKey,i) => {
-                    return (
+                {headers?.map((rowKey,i) => (
                     <td className="table-body-col" key={i}>{row[rowKey]}</td>
-                )})}
+                ))}
+                {deleteKey && 
+                    <td className="table-body-col">
+                        <TrashIcon 
+                            onClick={() => deleteHandler(row[deleteKey])} 
+                            className='delete-icon' 
+                        />
+                    </td>
+                }
             </tr>
-        )) :
+        )}) :
         <tr className="table-body-row">
-            <td colSpan={headers.length} className="col-span">{emptyRow ?? `No Records Found`}</td>
+            <td 
+                colSpan={deleteKey ? headers.length + 1 : headers.length} 
+                className="col-span">{emptyRow ?? `No Records Found`}
+            </td>
         </tr>;
     
     return (
@@ -19,9 +37,12 @@ const Table = ({headers, rows, rowKeys, emptyRow}) => {
         <table className="table">
             <thead className="table-head">
                 <tr className="table-row">
-                    {headers && headers?.map((item, index) => 
+                    {headers?.map((item, index) => 
                     <th className={`table-headers header_${index}`} key={index}>{item}</th>
                     )}
+                    {deleteKey && 
+                    <th className={`table-headers header_${headers.length}`}>Action</th>
+                    }
                 </tr>
             </thead>
             <tbody className="table-body">

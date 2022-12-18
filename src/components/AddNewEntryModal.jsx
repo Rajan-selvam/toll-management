@@ -2,27 +2,28 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 //Local Imports
 import { addNewVehicleLog } from '../features/tollGate/tollGateSlice';
-import { vehicle_types } from "./AddNewTollModal";
-import closeSvg from "../assets/close.svg";
+import { CloseIcon, vehicle_types } from "../constant/entities";
 
 const AddNewEntryModal = (props) => {
-    const tollNameRef = useRef();
-    const vehicleTypeRef = useRef();
-    const vNo = useRef();
-    const tariffRef = useRef();
-    const [inValid, setInValid] = useState(false);
 
     const dispatch = useDispatch();
     const { tollLogs,tollList } = useSelector((state) => state.tollGate);
 
-    const tollNames = tollList && tollList?.map((toll) => toll.tollName);
+    const [inValid, setInValid] = useState(false);
+    const tollNameRef = useRef();
+    const vehicleTypeRef = useRef();
+    const vehicleNo = useRef();
+    const tariffRef = useRef();
+
+    const tollNames = tollList && tollList?.map((toll) => toll[`TOLL NAME`]);
 
     //Entry log validation Handler
     const entryLogValidationHandler = () => {
         if(tollNameRef.current.value.length > 0 && vehicleTypeRef.current.value.length > 0){
-           const entryLogToll = tollList?.filter((toll) => toll.tollName.toUpperCase().match(tollNameRef.current.value.toUpperCase()));
-           tariffRef.current.value = entryLogToll[0][vehicleTypeRef.current.value+'Single'];
-           if(vNo.current.value.length > 0) findIsReturnVehicle();
+           let currentTollName = tollNameRef.current.value.toUpperCase();
+           const entryLogToll = tollList?.find((toll) => toll[`TOLL NAME`].toUpperCase().match(currentTollName));
+           tariffRef.current.value = parseFloat(entryLogToll[vehicleTypeRef.current.value].split('/')[0]);
+           if(vehicleNo.current.value.length > 0) findIsReturnVehicle();
         }
     };
 
@@ -30,31 +31,41 @@ const AddNewEntryModal = (props) => {
     const regNoValidationHandler = async (e) => {
         setInValid(false);
         const isRegNo = e.target.value.match(/^[0-9a-zA-Z]+$/);
-        if (isRegNo === null) setInValid(true);
-        // entryLogValidationHandler();
+        if (isRegNo === null) {
+            setInValid(true);
+            return false;
+        };
         await findIsReturnVehicle();        
     };
 
     const findIsReturnVehicle = () => {
+
+        let currentVehicleNo = vehicleNo.current.value;
+        let currentTollName = tollNameRef.current.value;
+        let currentVehicleType = vehicleTypeRef.current.value;
+        let previousOneHour =  new Date(new Date().getTime() - (1000 * 60 * 60)).getTime();
+
         const filteredLogs = tollLogs && tollLogs?.filter((tollLog) => {
-            return ((tollLog.vehicle_no === vNo.current.value) && 
-            (new Date(tollLog.timeStramp).getTime() >= new Date(new Date().getTime() - (1000 * 60 * 60)).getTime()) && 
-            (tollLog.tollName === tollNameRef.current.value));
+            return ((tollLog[`VEHICLE NUMBER`] === currentVehicleNo) && 
+            (new Date(tollLog.timeStramp).getTime() >= previousOneHour) && 
+            (tollLog[`TOLL NAME`] === currentTollName));
         });
-        const currentToll = tollList && tollList?.find(toll => toll.tollName === tollNameRef.current.value);
+
+        const currentToll = tollList && tollList?.find(toll => toll[`TOLL NAME`] === currentTollName);
         let latestLog = {};
+
         if (filteredLogs && filteredLogs.length >= 1) latestLog = filteredLogs[0];
         filteredLogs && filteredLogs.length > 1 && filteredLogs?.forEach((vehicleLog, index) => {
             if(new Date(latestLog.timeStramp).getTime() < new Date(filteredLogs[index].timeStramp).getTime()) {
                 latestLog = vehicleLog;
             }
         });
-        tariffRef.current.value = currentToll[vehicleTypeRef.current.value + 'Single'];
+
+        tariffRef.current.value = parseFloat(currentToll[currentVehicleType].split('/')[0]);
+
         if(Object.keys(latestLog).length > 0 && currentToll) {
-            if(currentToll[latestLog.vehicleType + 'Single'] === latestLog.tariff){
-                tariffRef.current.value = currentToll[vehicleTypeRef.current.value + 'Return'];
-            } else if(currentToll[latestLog.vehicleType + 'Return'] === latestLog.tariff){
-                tariffRef.current.value = currentToll[vehicleTypeRef.current.value + 'Single'];
+            if(parseFloat(currentToll[latestLog[`VEHICLE TYPE`]].split('/')[0]) === parseFloat(latestLog.TARIFF)){
+                tariffRef.current.value = parseFloat(currentToll[currentVehicleType].split('/')[1]);
             }
         }
     };
@@ -62,7 +73,7 @@ const AddNewEntryModal = (props) => {
     //save vehicle log
     const newEntrySubmitHandler = (e) => {
         e.preventDefault();
-        if(vNo.current.value.length < 8 || vNo.current.value.length > 11) {
+        if(vehicleNo.current.value.length < 8 || vehicleNo.current.value.length > 11) {
             setInValid(true);
             return false;
         }
@@ -74,14 +85,13 @@ const AddNewEntryModal = (props) => {
                d.getMinutes(),
                d.getSeconds()].join(':');
         const newEntry = {
-            tollName: tollNameRef.current.value,
-            vehicleType: vehicleTypeRef.current.value,
-            vehicle_no: vNo.current.value,
-            tariff: tariffRef.current.value,
-            dateTime: dformat,
+            [`TOLL NAME`]: tollNameRef.current.value,
+            [`VEHICLE TYPE`]: vehicleTypeRef.current.value,
+            [`VEHICLE NUMBER`]: vehicleNo.current.value,
+            [`TARIFF`]: tariffRef.current.value,
+            [`DATE/TIME`]: dformat,
             timeStramp: Date.now()
         };
-        // console.log(newEntry);
         dispatch(addNewVehicleLog(newEntry));
         closeModal();
     };
@@ -89,9 +99,9 @@ const AddNewEntryModal = (props) => {
     const closeModal = () => props.closeModal();
 
     return (
-        <div className="modal">
-            <div className="modal-content-wrap entry-form">
-            <img src={closeSvg} alt="close" onClick={closeModal} className="close-icon" />
+        <div className="modal" onClick={closeModal}>
+            <div className="modal-content-wrap entry-form" onClick={e => e.stopPropagation()}>
+            <CloseIcon onClick={closeModal} className="close-icon" />
             <h3 className="model-h3">Add new entry</h3>
             <div className="model-content">
                 <form onSubmit={newEntrySubmitHandler}>
@@ -114,7 +124,7 @@ const AddNewEntryModal = (props) => {
 
                         <div className="entry-model-from-group">
                             <label htmlFor="v_no">Vehicle Number<sup className="color-red">*</sup></label>
-                            <input type="text" ref={vNo} onChange={regNoValidationHandler} placeholder="Enter Vehicle Number" required />
+                            <input type="text" ref={vehicleNo} onChange={regNoValidationHandler} placeholder="Enter Vehicle Number" required />
                             { inValid && <span className="tollNameError">Enter Valid Reg Number</span>}
                         </div>
 

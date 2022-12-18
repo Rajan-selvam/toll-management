@@ -7,7 +7,10 @@
   margin-left: 25px;
 }
 .color-red{
-  color: red;
+  color: #ff0000;
+}
+svg:hover {
+  fill: #ff0000;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

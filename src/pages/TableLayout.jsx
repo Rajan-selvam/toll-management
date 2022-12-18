@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 //local import
 import AddNewTollModal from "../components/AddNewTollModal";
 import AddNewEntryModal from "../components/AddNewEntryModal";
 import Table from '../components/Table';
 import filterIcon from "../assets/filter.svg";
+import { deleteToll } from "../features/tollGate/tollGateSlice";
 import "./table.css";
 
 const TableLayout = ({...props}) => {
@@ -16,9 +18,11 @@ const TableLayout = ({...props}) => {
         search, 
         button, 
         tableHeaders, 
-        entries 
+        entries,
+        deleteKey
     } = props.props;
 
+    const Dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [showFilter, setShowFilter] = useState(false);
@@ -97,6 +101,13 @@ const TableLayout = ({...props}) => {
         setFilterRecords(entries);
     },[entries]);
 
+    //delete handler
+    const deleteHandler = (toll_name) => {
+        if (window.confirm(`${toll_name} Toll Delete Confirmation`) === true){
+            Dispatch(deleteToll(toll_name));
+        }            
+    };
+
     return (
         <div>
             <ul className="table-header">
@@ -117,9 +128,10 @@ const TableLayout = ({...props}) => {
             </ul>
             
             <Table 
-                headers={tableHeaders.headers} 
-                rows={filterRecords} 
-                rowKeys={tableHeaders.rowKeys} 
+                headers={tableHeaders} 
+                rows={filterRecords}
+                deleteKey={deleteKey}
+                deleteHandler={deleteHandler}
             />
 
             {newTollModal && <AddNewTollModal closeModal={()=> setNewTollModal(false)} />}

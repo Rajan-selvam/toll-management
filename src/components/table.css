@@ -36,5 +36,8 @@
 .delete-icon {
     width: 20px;
     height: 20px;
-    color: #ff0000;
+    text-align: center;
+}
+.delete-icon:hover {
+    fill: #ff0000;
 }

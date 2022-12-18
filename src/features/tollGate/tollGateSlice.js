@@ -34,7 +34,7 @@ export const deleteToll = createAsyncThunk(
   "delete-toll",
   async (tollName) => {
     let tollLists = await JSON.parse(localStorage.getItem('tollList'));
-    const result = tollLists.filter(toll => tollName !== toll.tollName);
+    const result = tollLists.filter(toll => tollName !== toll[`TOLL NAME`]);
     await localStorage.setItem('tollList',JSON.stringify(result));
     return result;
   }
